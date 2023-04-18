@@ -35,14 +35,6 @@ jobs:
           if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} ; then
             changed_folders="$changed_folders $folder"
           fi
-        done
-        echo "Changed folders: $changed_folders"
-        echo "::set-output name=folders::$changed_folders"
-
-    - name: Build and push Docker images
-      run: |
-        for folder in ${{ steps.changed_folders.outputs.folders }}
-        do
           if [ "$folder" == "client" ]; then
               my_ecr_repo="spiral-client-miki"
           elif [ "$folder" == "server" ]; then
