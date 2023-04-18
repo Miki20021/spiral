@@ -29,7 +29,7 @@ jobs:
     - name: Find changed folders
       id: changed_folders
       run: |
-        changed_folders=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.event.after }} | xargs -I{} dirname {})
+        changed_folders=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.event.after }} | xargs -I{} dirname {} | uniq)
         echo "Changed folders: $changed_folders"
         echo "::set-output name=folders::$changed_folders"
 
