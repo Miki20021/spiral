@@ -44,7 +44,7 @@ jobs:
           elif [ "$folder" == "worker" ]; then
               my_ecr_repo="spiral-worker-miki"
           else
-              echo "Invalid input. changes are accorded only on 'client', 'server', or 'worker'."
+              echo "$folder"
           fi
           ecr_repository="${{ steps.login-ecr.outputs.registry }}/$my_ecr_repo"
           # Get the current image tag
