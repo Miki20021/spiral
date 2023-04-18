@@ -29,7 +29,13 @@ jobs:
     - name: Find changed folders
       id: changed_folders
       run: |
-        changed_folders=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.event.after }} | grep 'Dockerfile' | xargs -I{} dirname {} | uniq)
+        target_folders="worker client server"
+        changed_folders=""
+        for folder in $target_folders; do
+          if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep -q "^$folder/.*Dockerfile$"; then
+            changed_folders="$changed_folders $folder"
+          fi
+        done
         echo "Changed folders: $changed_folders"
         echo "::set-output name=folders::$changed_folders"
 
