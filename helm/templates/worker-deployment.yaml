@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  annotations:
+    helm.sh/hook-weight: "3"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: "{{ .Values.worker.image }}"
+        env:
+        - name: REDIS_HOST
+          value: "{{ (lookup "v1" "Service" .Values.namespace .Values.redisservicename).spec.clusterIP }}"
+        - name: REDIS_PORT
+          value: "{{ .Values.redis.servicePort }}"

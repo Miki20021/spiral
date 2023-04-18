@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: app
+    alb.ingress.kubernetes.io/tags: project=app
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  rules:
+  - host: miki.spiralhomework.online
+    http:
+      paths:
+      - backend:
+          service:
+            name: client
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: server
+            port:
+              number: 5000
+        path: /api
+        pathType: Prefix

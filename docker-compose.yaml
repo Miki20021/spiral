@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: miki-root
+      MYSQLDATABASE: miki
+      MYSQLUSER: miki
+      MYSQLPASSWORD: miki
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  server:
+    image: spiral-server
+    environment:
+      MYSQLHOST: mysql
+      MYSQL_ROOT_PASSWORD: miki-root
+      MYSQLDATABASE: miki
+      MYSQLUSER: miki
+      MYSQLPASSWORD: miki
+      REDIS_HOST: redis
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+      - redis
+
+  worker:
+    image: spiral-worker
+    depends_on:
+      - mysql
+      - redis
+
+  client:
+    image: spiral-client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  mysql-data:
+  redis-data:

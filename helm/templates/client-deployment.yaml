@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  annotations:
+    helm.sh/hook-weight: "5"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+      - name: client
+        image: "{{ .Values.client.image }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.client.servicePort }}
+        env:
+        - name: REACT_APP_BASEURL
+          value: "http://{{ (lookup "v1" "Service" .Values.namespace .Values.serverserviceName).spec.clusterIP }}:{{ .Values.server.servicePort }}/api/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: {{ .Values.client.servicePort }}
+  selector:
+    app: client

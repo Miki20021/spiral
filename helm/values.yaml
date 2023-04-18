@@ -1,0 +1,26 @@
+mysql:
+  image: mysql:latest
+  rootPassword: miki-root
+  database: miki
+  user: miki
+  password: miki
+  servicePort: 3306
+
+redis:
+  image: redis:latest
+  servicePort: 6379
+
+server:
+  image: miki20021/spiral-server
+  servicePort: 5000
+
+worker:
+  image: miki20021/spiral-worker
+
+client:
+  image: 289512055556.dkr.ecr.eu-central-1.amazonaws.com/spiral-repo-client:miki-1.0
+  servicePort: 3000
+
+namespace: miki
+serverserviceName: server
+redisservicename: redis

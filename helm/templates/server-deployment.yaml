@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  annotations:
+    helm.sh/hook-weight: "2"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: "{{ .Values.server.image }}"
+        ports:
+        - containerPort: {{ .Values.server.servicePort }}
+        env:
+        - name: MYSQLHOST
+          value: "mysql"
+        - name: MYSQL_ROOT_PASSWORD
+          value: {{ .Values.mysql.rootPassword }}
+        - name: MYSQLDATABASE
+          value: {{ .Values.mysql.database }}
+        - name: MYSQLUSER
+          value: {{ .Values.mysql.user }}
+        - name: MYSQLPASSWORD
+          value: {{ .Values.mysql.password }}
+        - name: REDIS_HOST
+          value: "{{ (lookup "v1" "Service" .Values.namespace .Values.redisservicename).spec.clusterIP }}"
+        - name: REDIS_PORT
+          value: "{{ .Values.redis.servicePort }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.server.servicePort }}
+  selector:
+    app: server

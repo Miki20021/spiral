@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 
 class Fib extends Component {
   state = {
@@ -16,12 +16,12 @@ class Fib extends Component {
   }
 
   async fetchValues() {
-    const values = await axios.get('values/current');
+    const values = await axios.get('api/values/current');
     this.setState({ values: values.data });
   }
 
   async fetchIndexes() {
-    const seenIndexes = await axios.get('values/all');
+    const seenIndexes = await axios.get('api/values/all');
     this.setState({
       seenIndexes: seenIndexes.data
     });
@@ -30,7 +30,7 @@ class Fib extends Component {
   handleSubmit = async event => {
     event.preventDefault();
 
-    await axios.post('values', {
+    await axios.post('api/values', {
       index: this.state.index
     });
     this.setState({ index: '' });
