@@ -31,7 +31,7 @@ jobs:
       run: |
         target_folders=("worker" "client" "server")
         changed_folders=""
-        for folder in "${target_folders[@]}"; do
+        for folders in "${target_folders[@]}"; do
           if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} ; then
             changed_folders="$changed_folders $folder"
           fi
