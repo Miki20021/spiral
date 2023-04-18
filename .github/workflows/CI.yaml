@@ -29,14 +29,15 @@ jobs:
     - name: Find changed folders
       id: changed_folders
       run: |
-        target_folders="worker client server"
-        changed_folders=""
-        for folder in $target_folders; do
+        target_folders=("worker" "client" "server")
+        changed_folders=()
+        for folder in "${target_folders[@]}"; do
           if git diff HEAD^ HEAD --name-only | grep -q "^$folder/"; then
-            changed_folders="$changed_folders $folder"
+            changed_folders+=("$folder")
           fi
         done
-        echo "::set-output name=folders::$changed_folders"
+        changed_folders_string="${changed_folders[*]}"
+        echo "::set-output name=folders::$changed_folders_string"
 
     - name: Build and push changed folders
       run: |
