@@ -41,7 +41,8 @@ jobs:
     - name: Build and push changed folders
       run: |
         changed_folders=${{ steps.changed_folders.outputs.folders }}
-        for folder in $changed_folders; do
+        IFS=' ' read -ra changed_folders_array <<< "$changed_folders"
+        for folder in "${changed_folders_array[@]}"; do
           if [ "$folder" == "client" ]; then
               my_ecr_repo="spiral-client-miki"
           elif [ "$folder" == "server" ]; then
