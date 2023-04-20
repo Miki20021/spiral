@@ -1,4 +1,4 @@
 server:
   repo: 289512055556.dkr.ecr.eu-central-1.amazonaws.com/spiral-server-miki
-  tag: "1.1"
+  tag: "1.2"
   servicePort: 5000
