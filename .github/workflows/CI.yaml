@@ -71,8 +71,11 @@ jobs:
         git config --global user.name "GitHub Actions"
 
     - name: Commit and push Helm chart changes
+      if: ${{ steps.changed_folders.outputs.folders != '' }}
       run: |
         git add -A
         git commit -m "Update Helm chart tags"
         git remote set-url origin https://x-access-token:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
+      environment:
+        name: Deploy
