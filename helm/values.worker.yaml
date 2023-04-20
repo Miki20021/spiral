@@ -1,0 +1,4 @@
+worker:
+  repo: 289512055556.dkr.ecr.eu-central-1.amazonaws.com/spiral-worker-miki
+  tag: "1.5"
+

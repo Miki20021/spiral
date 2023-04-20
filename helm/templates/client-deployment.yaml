@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: "{{ .Values.client.image }}"
+        image: "{{ .Values.client.repo }}:{{ .Values.client.tag }}"
         imagePullPolicy: Always
         ports:
         - containerPort: {{ .Values.client.servicePort }}

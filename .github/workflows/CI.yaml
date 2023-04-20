@@ -42,6 +42,7 @@ jobs:
     - name: Build and push changed folders
       run: |
         changed_folders=${{ steps.changed_folders.outputs.folders }}
+        
         IFS=' ' read -ra changed_folders_array <<< "$changed_folders"
         for folder in "${changed_folders_array[@]}"; do
           if [ "$folder" == "client" ]; then
@@ -52,14 +53,14 @@ jobs:
               my_ecr_repo="spiral-worker-miki"
           else
               echo "$folder"
-          fi
+
           ecr_repository="${{ steps.login-ecr.outputs.registry }}/$my_ecr_repo"
-          # Get the current image tag
           current_tag=$(aws ecr describe-images --repository-name $my_ecr_repo --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
-
-          # Increment the tag by 0.1
           new_tag=$(echo "$current_tag + 0.1" | bc)
-
+          value_fil=""./helm/values.$folder.yaml"
+          yq eval -i ".$folder.tag = \"$new_tag\"" "$values_file"
+          cat $values_file
           docker build -t $ecr_repository:$new_tag $folder
           docker push $ecr_repository:$new_tag
+          fi
         done

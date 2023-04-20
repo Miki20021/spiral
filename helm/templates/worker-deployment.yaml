@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: worker
-        image: "{{ .Values.worker.image }}"
+        image: "{{ .Values.worker.repo }}:{{ .Values.worker.tag}}"
         env:
         - name: REDIS_HOST
           value: "{{ (lookup "v1" "Service" .Values.namespace .Values.redisservicename).spec.clusterIP }}"
