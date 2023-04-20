@@ -74,4 +74,5 @@ jobs:
       run: |
         git add -A
         git commit -m "Update Helm chart tags"
+        git remote set-url origin https://x-access-token:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
