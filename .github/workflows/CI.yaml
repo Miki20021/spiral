@@ -62,5 +62,4 @@ jobs:
           cat $values_file
           docker build -t $ecr_repository:$new_tag $folder
           docker push $ecr_repository:$new_tag
-          fi
         done
