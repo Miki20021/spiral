@@ -4,7 +4,7 @@ WORKDIR /app
 RUN chown -R spiral:spiralgroup /app
 USER spiral
 COPY --chown=spiral:spiralgroup package.json ./
-RUN npm install --only=production && npm audit fix
+RUN npm install --only=production && npm audit fix --force
 COPY --chown=spiral:spiralgroup . .
 ENTRYPOINT ["npm"]
 CMD ["run", "start"]
