@@ -64,3 +64,14 @@ jobs:
           docker build -t $ecr_repository:$new_tag $folder
           docker push $ecr_repository:$new_tag
         done
+    
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Commit and push Helm chart changes
+      run: |
+        git add -A
+        git commit -m "Update Helm chart tags"
+        git push
