@@ -31,7 +31,7 @@ spec:
         - name: MYSQLPASSWORD
           value: {{ .Values.mysql.password }}
         - name: REDIS_HOST
-          value: "{{- $redisService := lookup "v1" "Service" .Values.namespace .Values.redisservicename }}{{- if $redisService }}{{- $redisService.spec.clusterIP }}{{- else }}{{- "default-redis-clusterIP" }}{{- end }}"
+          value: "redis"
         - name: REDIS_PORT
           value: "{{ .Values.redis.servicePort }}"
 ---
