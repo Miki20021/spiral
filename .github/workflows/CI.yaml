@@ -53,7 +53,7 @@ jobs:
               my_ecr_repo="spiral-worker-miki"
           else
               echo "$folder"
-
+          fi
           ecr_repository="${{ steps.login-ecr.outputs.registry }}/$my_ecr_repo"
           current_tag=$(aws ecr describe-images --repository-name $my_ecr_repo --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
           new_tag=$(echo "$current_tag + 0.1" | bc)
