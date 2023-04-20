@@ -42,7 +42,7 @@ jobs:
     - name: Build and push changed folders
       run: |
         changed_folders=${{ steps.changed_folders.outputs.folders }}
-        
+
         IFS=' ' read -ra changed_folders_array <<< "$changed_folders"
         for folder in "${changed_folders_array[@]}"; do
           if [ "$folder" == "client" ]; then
@@ -54,12 +54,13 @@ jobs:
           else
               echo "$folder"
           fi
+
           ecr_repository="${{ steps.login-ecr.outputs.registry }}/$my_ecr_repo"
           current_tag=$(aws ecr describe-images --repository-name $my_ecr_repo --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
           new_tag=$(echo "$current_tag + 0.1" | bc)
-          value_file=""./helm/values.$folder.yaml"
-          yq eval -i ".$folder.tag = \"$new_tag\"" "$values_file"
-          cat $values_file
+          value_file="./helm/values.$folder.yaml"
+          yq eval -i ".$folder.tag = \"$new_tag\"" "$value_file"
+          cat $value_file
           docker build -t $ecr_repository:$new_tag $folder
           docker push $ecr_repository:$new_tag
         done
