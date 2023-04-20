@@ -12,7 +12,8 @@ jobs:
       AWS_REGION: eu-central-1
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+    environment:
+        name: Deploy
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -77,5 +78,4 @@ jobs:
         git commit -m "Update Helm chart tags"
         git remote set-url origin https://x-access-token:${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
         git push
-      environment:
-        name: Deploy
+      
