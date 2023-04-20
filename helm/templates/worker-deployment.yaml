@@ -19,6 +19,6 @@ spec:
         image: "{{ .Values.worker.repo }}:{{ .Values.worker.tag}}"
         env:
         - name: REDIS_HOST
-          value: "{{ (lookup "v1" "Service" .Values.namespace .Values.redisservicename).spec.clusterIP }}"
+          value: "{{- $redisService := lookup "v1" "Service" .Values.namespace .Values.redisservicename }}{{- if $redisService }}{{- $redisService.spec.clusterIP }}{{- else }}{{- "default-redis-clusterIP" }}{{- end }}"
         - name: REDIS_PORT
           value: "{{ .Values.redis.servicePort }}"

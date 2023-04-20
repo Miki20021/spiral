@@ -22,7 +22,7 @@ spec:
         - containerPort: {{ .Values.client.servicePort }}
         env:
         - name: REACT_APP_BASEURL
-          value: "http://{{ (lookup "v1" "Service" .Values.namespace .Values.serverserviceName).spec.clusterIP }}:{{ .Values.server.servicePort }}/api/"
+          value: "{{- $serverserviceName := lookup "v1" "Service" .Values.namespace .Values.serverserviceName }}{{- if $serverserviceName }}{{- $serverserviceName.spec.clusterIP }}{{- else }}{{- "default-server-clusterIP" }}{{- end }}:{{ .Values.server.servicePort }}/api/"
 ---
 apiVersion: v1
 kind: Service

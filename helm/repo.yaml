@@ -1,0 +1,10 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Repository
+metadata:
+  name: my-repo
+  namespace: argocd
+spec:
+  url: git@github.com:Miki20021/spiral.git
+  sshPrivateKeySecret:
+    name: my-repo-ssh-key
+    key: sshPrivateKey

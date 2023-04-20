@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spiral
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Miki20021/spiral.git
+    targetRevision: main
+    path: helm
+    helm:
+      valueFiles:
+        - values.client.yaml
+        - values.worker.yaml
+        - values.server.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: miki
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=false
